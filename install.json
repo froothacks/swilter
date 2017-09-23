@@ -7,6 +7,10 @@
       },
       {
         "type": "script",
+        "src": "./build/jquery-3.2.1.min.js"
+      },
+      {
+        "type": "script",
         "src": "./build/app.js"
       }
     ]
