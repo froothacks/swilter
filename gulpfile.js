@@ -7,14 +7,10 @@ var babel = require("gulp-babel");
 var pug = require("gulp-pug");
 var sass = require("gulp-sass");
 var autoprefixer = require("gulp-autoprefixer");
-var sourcemaps = require("gulp-sourcemaps");
 var notify = require("gulp-notify");
-var browserSync = require("browser-sync").create();
 var browserify = require('gulp-browserify');
-
-
-let uglify = require('gulp-uglify-es').default;
-let rename = require("gulp-rename");
+var uglify = require('gulp-uglify-es').default;
+// var rename = require("gulp-rename");
 
 
 // config
@@ -24,7 +20,7 @@ var paths = {
     babel: "src/**/*.js",
     sass: "src/**/*.scss",
     static: "static/**/*",
-    browserify: "src/popup.js"
+    browserify: "src/app.js"
   },
   dest: { 
     html: "build",
@@ -48,7 +44,6 @@ gulp.task("pug", function() {
       title: "Pug error"
     }))
     .pipe(gulp.dest(paths.dest.html))
-    .pipe(browserSync.stream())
     .pipe(notify({
       title: "Success",
       message: "Compiled Pug file to HTML: <%= file.relative %>"
@@ -69,7 +64,6 @@ gulp.task("babel", function() {
     }))
     // .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(paths.dest.js))
-    .pipe(browserSync.stream())
     .pipe(notify({
       title: "Success",
       message: "Compiled Babel file to JS: <%= file.relative %>"
@@ -89,7 +83,6 @@ gulp.task("sass", function() {
       env: browsers
     }))
     .pipe(gulp.dest(paths.dest.css))
-    .pipe(browserSync.stream())
     .pipe(notify({
       title: "Success",
       message: "Compiled Sass file to CSS: <%= file.relative %>"
@@ -99,27 +92,24 @@ gulp.task("sass", function() {
 gulp.task("static", function() {
   return gulp.src(paths.src.static)
     .pipe(gulp.dest(paths.dest.static))
-    .pipe(browserSync.stream())
     .pipe(notify({
       title: "Success",
       message: "Copied static file: <%= file.relative %>"
     }));
 });
 
-gulp.task("scripts", function() {
-    // Single entry point to browserify 
-    return gulp.src('src/popup.js')
-        .pipe(browserify({
-          insertGlobals : true,
-          debug : false
-        }))
-        .pipe(browserSync.stream())
-        .pipe(uglify())
-        .pipe(gulp.dest(paths.dest.browserify))
-        .pipe(notify({
-          title: "Success",
-          message: "Browserfied: <%= file.relative %>"
-        }));
+gulp.task("browserify", function() {
+  return gulp.src(paths.src.browserify)
+    .pipe(browserify({
+      insertGlobals: true,
+      debug: false
+    }))
+    .pipe(uglify())
+    .pipe(gulp.dest(paths.dest.browserify))
+    .pipe(notify({
+      title: "Success",
+      message: "Browserfied: <%= file.relative %>"
+    }));
 });
 
 
@@ -128,24 +118,16 @@ gulp.task("clean", function(done) {
 });
 
 gulp.task("watch", function() {  
-  gulp.watch(paths.src.browserify, gulp.task("scripts"));
   gulp.watch(paths.src.pug, gulp.task("pug"));
   gulp.watch(paths.src.babel, gulp.task("babel"));
   gulp.watch(paths.src.sass, gulp.task("sass"));
   gulp.watch(paths.src.static, gulp.task("static"));
-});
-
-gulp.task("sync", function() {
-  browserSync.init({
-    server: {
-      baseDir: paths.dest.html
-    }
-  });
+  gulp.watch(paths.src.browserify, gulp.task("browserify"));
 });
 
 gulp.task("build",
   gulp.series("clean",
-    gulp.parallel("pug", "babel", "sass", "static", "scripts")));
+    gulp.parallel("pug", "babel", "sass", "static", "browserify")));
 
 gulp.task("default", 
   gulp.series("build", "watch"));
