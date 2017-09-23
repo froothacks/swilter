@@ -1,0 +1,30 @@
+{
+  "name": "swilter",
+  "version": "0.1.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/froothacks/swilter.git"
+  },
+  "author": "froothacks",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/froothacks/swilter/issues"
+  },
+  "homepage": "https://github.com/froothacks/swilter",
+  "dependencies": {},
+  "devDependencies": {
+    "standard": "^9.0.2"
+  },
+  "standard": {
+    "globals": [
+      "INSTALL",
+      "INSTALL_OPTIONS",
+      "INSTALL_SCOPE",
+      "INSTALL_ID"
+    ]
+  }
+}
