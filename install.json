@@ -28,7 +28,7 @@
       "location": {
         "order": 0,
         "title": "Message Location",
-        "description": "Where should the message appear?",
+        "description": "Where should the controls appear?",
         "type": "object",
         "format": "element",
         "default": {
