@@ -3,11 +3,11 @@
     "body": [
       {
         "type": "style",
-        "src": "./source/app.css"
+        "src": "./build/app.css"
       },
       {
         "type": "script",
-        "src": "./source/app.js"
+        "src": "./build/app.js"
       }
     ]
   },
@@ -38,7 +38,7 @@
         "type": "string",
         "format": "richtext",
         "order": 1,
-        "default": "<p>Welcome to Cloudflare Apps! This is our example app.</p><p>Download this app every time you want to make a new project.</p>"
+        "default": "<p>Welcome to Cloudflare Apps! This is our example app that utilizes Webpack.</p><p>Download this app every time you want to make a new project with the latest JavaScript and CSS features.</p>"
       }
     }
   }

@@ -3,8 +3,8 @@
 
   if (!window.addEventListener) return // Check for IE9+
 
-  var options = INSTALL_OPTIONS
-  var element
+  let options = INSTALL_OPTIONS
+  let element
 
   // updateElement runs every time the options are updated.
   // Most of your code will end up inside this function.
@@ -18,7 +18,7 @@
 
   // INSTALL_SCOPE is an object that is used to handle option changes without refreshing the page.
   window.INSTALL_SCOPE = {
-    setOptions: function setOptions (nextOptions) {
+    setOptions (nextOptions) {
       options = nextOptions
 
       updateElement()
