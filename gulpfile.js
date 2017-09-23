@@ -12,7 +12,6 @@ var browserify = require('gulp-browserify');
 var uglify = require('gulp-uglify-es').default;
 // var rename = require("gulp-rename");
 
-
 // config
 var paths = {
   src: {
@@ -111,7 +110,6 @@ gulp.task("browserify", function() {
       message: "Browserfied: <%= file.relative %>"
     }));
 });
-
 
 gulp.task("clean", function(done) {
   return del("build/**/*", done);
