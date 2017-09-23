@@ -12,7 +12,7 @@
     element = INSTALL.createElement(options.location, element)
 
     // Set the app attribute to your app's dash-delimited alias.
-    element.setAttribute('app', 'example')
+    element.setAttribute('app', 'swilter')
     element.innerHTML = options.message
   }
 

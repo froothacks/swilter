@@ -1,5 +1,5 @@
 /* Set the app attribute to your app's dash-delimited alias. */
-cloudflare-app[app="example"] {
+cloudflare-app[app="swilter"] {
   display: block;
   font-weight: bold;
   margin: .5em .2em;
@@ -8,22 +8,22 @@ cloudflare-app[app="example"] {
 }
 
 /* Use native elements when you'd like to inherit some styles from the page. */
-cloudflare-app[app="example"] p {
+cloudflare-app[app="swilter"] p {
   text-indent: 0;
 }
 
 /* Use em units to scale elements for different inherited styles. */
-cloudflare-app[app="example"] h1 {
+cloudflare-app[app="swilter"] h1 {
   font-size: 1.8em;
 }
 
 /* Use custom elements to avoid style inheritance. */
-cloudflare-app[app="example"] example-button {
+cloudflare-app[app="swilter"] example-button {
   border: 1px solid;
 }
 
 /* Prefix classes with your app's alias to avoid style collisions. */
-cloudflare-app[app="example"] .example-highlighted {
+cloudflare-app[app="swilter"] .example-highlighted {
   background-color: yellow;
   outline: .2em solid yellow;
 }

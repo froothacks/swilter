@@ -22,9 +22,9 @@
   "options": {
     "properties": {
       "location": {
+        "order": 0,
         "title": "Message Location",
         "description": "Where should the message appear?",
-        "order": 0,
         "type": "object",
         "format": "element",
         "default": {
@@ -33,11 +33,11 @@
         }
       },
       "message": {
+        "order": 1,
         "title": "Message",
         "description": "A short example message.",
         "type": "string",
         "format": "richtext",
-        "order": 1,
         "default": "<p>Welcome to Cloudflare Apps! This is our example app that utilizes Webpack.</p><p>Download this app every time you want to make a new project with the latest JavaScript and CSS features.</p>"
       }
     }
