@@ -1,5 +1,75 @@
+console.log("top");
 (function () {
   "use strict";
+  //let fetch = require("node-fetch");
+  //var $ = require('jQuery');
+  function isSwear(string) {
+      let badwordRegex = /(\b(ur mom|(yo)?u suck|8={3,}D|nigg[aeu][rh]?|ass|(ass ?|a|a-)hole|fag(got)?|daf[au][qk]|(brain|mother|mutha)?fuc?k+(a|ing?|e?(r|d)| off+| y(ou|e)(rself)?|u+|tard)?|shit?(t?er|s|head)?|you scum|dickhead|pedo|whore|cunt|cocksucker|ejaculated?|jerk off|cummies|butthurt|queef|(private|pussy) show|pussy|lesbo|bitche?s?|hoe|(eat|suck)\b.{0,20}\b dick|dee[sz]e? nut[sz])s?\b)/;
+      let re = new RegExp(badwordRegex);
+      return re.exec(string) !== null;
+  }
+  function isOffensive(text, funct, commentJSON) {
+
+      let resultingStuff;
+      let data = {
+          "documents": [
+              {
+                  "language": "en",
+                  "id": "string",
+                  "text": text
+              }
+          ]
+      };
+      console.log("HEREEE");
+      $.ajax({
+          url : "https://eastus2.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment",
+          type: "POST",
+          headers: {"Content-Type": "application/json", "Ocp-Apim-Subscription-Key": "b0df8262f41e49e98c4d043237ae5c65"},
+          data : JSON.stringify(data),
+          success: function(data, textStatus, jqXHR)
+          {
+              console.log("in");
+              console.log(data);
+              let sentiment = data["documents"][0]["score"];
+              console.log("Me"+sentiment);
+              resultingStuff = sentiment < 0.2;
+              commentJSON["isOffensive"] = resultingStuff;
+              writeUserData(commentJSON);
+              funct(commentJSON);
+              return resultingStuff;
+          },
+          error: function (jqXHR, textStatus, errorThrown)
+          {
+            console.log("bad stuff");
+            return "FAIL";
+          }
+      });
+       // return fetch("https://eastus2.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment", {
+       //        method: 'POST',
+       //        body: JSON.stringify(data),
+       //        headers: {"Content-Type": "application/json", "Ocp-Apim-Subscription-Key": "b0df8262f41e49e98c4d043237ae5c65"}})
+       //        .then(res => res.json())
+       //        .then(json => {
+       //            console.log(json);
+       //            let sentiment = json["documents"][0]["score"];
+       //            console.log("Me"+sentiment);
+       //            resultingStuff = sentiment < 0.03;
+       //            return resultingStuff;
+       //        });
+
+  }
+
+  function getGIPHY(keywords=["cats","dogs","bears","love"]) {
+    searchQ = keywords[Math.floor(Math.random() * keywords.length) - 1];
+    console.log(searchQ);
+    return fetch("https://api.giphy.com/v1/gifs/search?api_key=GBov9dSMPUy2DLg9DMO0miWJlBP3sEo4&q=" + searchQ + "&limit=1&offset=0&rating=G&lang=en")
+        .then(res => {
+            return res.json();
+        })
+        .then(json => {
+            return json["data"][0]["embed_url"];
+        });
+  }
 
   console.log("loaded app.js");
 
@@ -79,8 +149,22 @@
           return;
         }
         commentJSON["fullname"] = nameInput;
-        writeUserData(commentJSON);
-        success(commentJSON);
+
+        commentJSON["isSwear"] = isSwear(commentJSON["content"]);
+        console.log("NINEINIENEIE");
+        isOffensive(commentJSON["content"], success, commentJSON);
+        // $.when(isOffensive(commentJSON["content"])).done(function(value) {
+        //   commentJSON["isOffensive"] = value;
+        // });
+
+        // isOffensive(commentJSON["content"]).then((value) => {
+        //   commentJSON["isOffensive"] = value;          
+        //   writeUserData(commentJSON);
+        //   success(commentJSON);
+        // });
+
+        // writeUserData(commentJSON);
+        // success(commentJSON);
       },
       getComments: function(success, error) {
         var commentsArray = [];
