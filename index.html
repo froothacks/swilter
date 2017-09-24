@@ -8,7 +8,13 @@
 </head>
 <body>
 
+
+
+<textarea id="nameInput" style="resize: none;overflow:hidden;" placeholder="Enter your name..." rows="1" cols="40">
+</textarea>
+<br>
 <div id="comments-container"></div>
+
 <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
 <script>
   // Initialize Firebase
@@ -55,6 +61,12 @@ function readAllData() {
 $('#comments-container').comments({
     profilePictureURL: 'https://app.viima.com/static/media/user_profiles/user-icon.png',
     postComment: function(commentJSON, success, error) {
+      var nameInput = $("#nameInput").val();
+      if (nameInput === "") {
+        error();
+        alert("Please enter a valid name!");
+        return;
+      }
     	console.log(commentJSON);
     	//console.log(database.ref().getChildren());
     	database.ref().on("value", function(data) {
@@ -63,6 +75,7 @@ $('#comments-container').comments({
 		      console.log(childSnapshot.val());
 		    });
     	});
+      commentJSON["fullname"] = nameInput;
     	writeUserData(commentJSON);
     	success(commentJSON);
     	

@@ -1665,7 +1665,7 @@
             });
 
             // Name
-            var nameText = commentModel.createdByCurrentUser ? this.options.textFormatter(this.options.youText) : commentModel.fullname;
+            var nameText = commentModel.fullname;
             var name = $('<div/>', {
                 'class': 'name'
             });
