@@ -1,4 +1,5 @@
 "use strict";
+var fetch = require('node-fetch');
 
 
 function IsSwear(string) {
@@ -39,11 +40,11 @@ function IsOffensive(text) {
             {
                 "language": "en",
                 "id": "string",
-                "text": "Happy is good"
+                "text": text
             }
         ]
     };
-    var fetch = require('node-fetch');
+
     fetch("https://eastus2.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment", {
         method: 'POST',
         body: JSON.stringify(data),
