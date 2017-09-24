@@ -2,11 +2,12 @@
   "resources": {
     "head": [
       {"type": "style", "src": "./build/css/jquery-comments.css"},
-      {"type": "style", "src": "./build/css/font-awesome.css"},
+      {"type": "style", "src": "./build/css/font-awesome.min.css"},
       {"type": "style", "src": "./build/css/app.css"},
 
       {"type": "script", "src": "./build/js/jquery-3.2.1.min.js"},
-      {"type": "script", "src": "./build/js/jquery-comments.js"},
+      {"type": "script", "src": "./build/js/jquery-comments.min.js"},
+      {"type": "script", "src": "./build/js/firebase.js"},
       {"type": "script", "src": "./build/js/app.js"}
     ]
   },
