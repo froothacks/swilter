@@ -6,6 +6,7 @@
 <p> This is a paragraph.</p>
 <img src="fhyt5.jpg" alt="You are missing out on the meme... Fix your browser." style="width:304px;height:228px;">
 <div id="disqus_thread"></div>
+<div id="done"> Not Done. </div>
 <script>
 
 /**
@@ -17,6 +18,11 @@ this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL va
 this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
 };
 */
+function disqus_config() {
+    this.callbacks.afterRender = [function() {
+        document.getElementById("done").innerHTML = "Done Now.";
+    }];
+}
 (function() { // DON'T EDIT BELOW THIS LINE
 var d = document, s = d.createElement('script');
 s.src = 'https://swilter-example.disqus.com/embed.js';
