@@ -17,16 +17,16 @@ var paths = {
   src: {
     // pug: "src/**/*.pug",
     // babel: "src/**/*.js",
-    sass: "src/**/*.scss",
-    static: "static/**/*",
-    script: "src/**/*.js"
+    script: "src/js/**/*.js",
+    sass: "src/css/**/*.scss",
+    static: "static/**/*"
   },
   dest: { 
     // html: "build",
     // js: "temp",
-    css: "build",
-    static: "build",
-    script: "build"
+    script: "build/js",
+    sass: "build/css",
+    static: "build"
   }
 };
 var browsers = "> 1%, last 2 versions, IE >= 9, Firefox ESR"
@@ -81,7 +81,7 @@ gulp.task("sass", function() {
     .pipe(autoprefixer({
       env: browsers
     }))
-    .pipe(gulp.dest(paths.dest.css))
+    .pipe(gulp.dest(paths.dest.sass))
     .pipe(notify({
       title: "Success",
       message: "Compiled Sass file to CSS: <%= file.relative %>"

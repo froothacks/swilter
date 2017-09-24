@@ -3,8 +3,12 @@
 $color-disabled: #d9534f;
 $color-enabled: #5cb85c;
 
+$switch-width: 2.8rem;
+$switch-height: 1.6rem;
+$switch-padding: 0.2rem;
+
 /* Set the app attribute to your app's dash-delimited alias. */
-cloudflare-app[app="swilter"] {
+swilter {
   display: block;
   font-family: "Droid Sans", sans-serif;
   font-size: 1rem;
@@ -12,17 +16,23 @@ cloudflare-app[app="swilter"] {
   border: 1px solid #cccccc;
   padding: 0.5rem;
 
-  swilter-main {
+  swilter-h1 {
+    display: block;
+    font-size: 1.5rem;
+    margin-right: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  swilter-nav {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     flex-flow: flex-start;
     align-items: center;
+    margin-bottom: 1rem;
   }
 
-  swilter-h1 {
-    font-size: 1.5rem;
-    margin-right: 0.5rem;
+  swilter-main {
   }
 
   /* Use native elements when you'd like to inherit some styles from the page. */
@@ -47,11 +57,11 @@ cloudflare-app[app="swilter"] {
   // }
 
   .swilter-switch {
-    margin-left: 1em;
+    margin-right: 0.5em;
     position: relative;
     display: inline-block;
-    width: 56px;
-    height: 32px;
+    width: $switch-width;
+    height: $switch-height;
 
     input {
       display: none;
@@ -65,17 +75,17 @@ cloudflare-app[app="swilter"] {
       right: 0;
       bottom: 0;
       background-color: $color-disabled;
-      border-radius: 32px;
+      border-radius: $switch-height;
       transition: 0.4s;
     }
 
     .swilter-switch-slider:before {
       position: absolute;
       content: "";
-      height: 24px;
-      width: 24px;
-      left: 4px;
-      bottom: 4px;
+      height: $switch-height - 2 * $switch-padding;
+      width: $switch-height - 2 * $switch-padding;
+      left: $switch-padding;
+      bottom: $switch-padding;
       background-color: white;
       border-radius: 50%;
       transition: 0.4s;
@@ -86,12 +96,12 @@ cloudflare-app[app="swilter"] {
     }
 
     input:checked + .swilter-switch-slider:before {
-      transform: translateX(24px);
+      transform: translateX($switch-width - $switch-height);
     }
   }
 
   .swilter-switch-label {
-    padding-left: 0.5rem;
+    padding-right: 1.5rem;
     display: inline-block;
   }
 }

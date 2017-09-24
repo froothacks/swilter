@@ -1,14 +1,13 @@
 {
   "resources": {
-    "body": [
-      {
-        "type": "style",
-        "src": "./build/app.css"
-      },
-      {
-        "type": "script",
-        "src": "./build/app.js"
-      }
+    "head": [
+      {"type": "style", "src": "./build/css/jquery-comments.css"},
+      {"type": "style", "src": "./build/css/font-awesome.css"},
+      {"type": "style", "src": "./build/css/app.css"},
+
+      {"type": "script", "src": "./build/js/jquery-3.2.1.min.js"},
+      {"type": "script", "src": "./build/js/jquery-comments.js"},
+      {"type": "script", "src": "./build/js/app.js"}
     ]
   },
   "preview": {
@@ -23,8 +22,8 @@
     "properties": {
       "location": {
         "order": 0,
-        "title": "Message Location",
-        "description": "Where should the controls appear?",
+        "title": "Location",
+        "description": "Where should the app appear on your site?",
         "type": "object",
         "format": "element",
         "default": {
@@ -32,13 +31,19 @@
           "method": "prepend"
         }
       },
-      "message": {
+      "filterProfanity": {
         "order": 1,
-        "title": "Message",
-        "description": "A short example message.",
-        "type": "string",
-        "format": "richtext",
-        "default": "<p>Welcome to Cloudflare Apps! This is our example app that utilizes Webpack.</p><p>Download this app every time you want to make a new project with the latest JavaScript and CSS features.</p>"
+        "title": "Filter Profanity (Default)",
+        "description": "Filter profanity by default?",
+        "type": "boolean",
+        "default": true
+      },
+      "filterAdHominem": {
+        "order": 2,
+        "title": "Filter Ad Hominem (Default)",
+        "description": "Filter ad hominem by default?",
+        "type": "boolean",
+        "default": true
       }
     }
   }
