@@ -1,5 +1,4 @@
-console.log("top");
-(function () {
+(function ($) {
   "use strict";
   //let fetch = require("node-fetch");
   //var $ = require('jQuery');
@@ -78,6 +77,11 @@ console.log("top");
   let options = INSTALL_OPTIONS;
   let database, element;
 
+  let filters = {
+    "profanity": options.filterProfanity,
+    "adHominem": options.filterAdHominem
+  }
+
   let controlsHTML = `
     <swilter>
       <swilter-h1>Swilter Comments</swilter-h1>
@@ -120,15 +124,13 @@ console.log("top");
     });
   }
 
-  // updateHTML runs every time the options are updated.
-  // Most of your code will end up inside this function.
   function updateHTML() {
+    // updateHTML runs every time the options are updated.
+    // Most of your code will end up inside this function.
     element = $(INSTALL.createElement(options.location, element));
     element.attr("app", "swilter");
     element.html(controlsHTML);
-  }
 
-  function updateComments() {
     // Initialize Firebase
     // TODO: Replace with your project's customized code snippet
     let config = {
@@ -138,7 +140,12 @@ console.log("top");
     };
     firebase.initializeApp(config);
     database = firebase.database();
+  }
 
+  function updateComments() {
+    if ($('#comments-container').hasClass("jquery-comments")) {
+      $('#comments-container').html("")
+    }
     $('#comments-container').comments({
       profilePictureURL: 'https://app.viima.com/static/media/user_profiles/user-icon.png',
       postComment: function(commentJSON, success, error) {
@@ -170,11 +177,30 @@ console.log("top");
         var commentsArray = [];
         database.ref().on("value", function(data) {
           data.forEach(function(childSnapshot) {
-            commentsArray.push(childSnapshot.val());
+            // console.log(childSnapshot.val());
+            if ( !(filters.profanity && childSnapshot.val().isSwear)
+              && !(filters.adHominem && childSnapshot.val().isOffensive)) {
+              commentsArray.push(childSnapshot.val());
+            }
+            else {
+              let cleanComment = childSnapshot.val();
+              cleanComment.content = "BLEEP";
+              commentsArray.push(cleanComment);
+            }
           });
           success(commentsArray);
         });
       }
+    });
+
+    $("#swilter-filter-profanity").change(function() {
+      filters.profanity = this.checked;
+      updateComments();
+    });
+
+    $("#swilter-filter-ad-hominem").change(function() {
+      filters.adHominem = this.checked;
+      updateComments();
     });
   }
 
@@ -197,4 +223,4 @@ console.log("top");
   } else {
     update();
   }
-}());
+}(jQuery));
