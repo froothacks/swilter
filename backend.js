@@ -57,7 +57,7 @@ function IsOffensive(text) {
         console.log(sentiment);
 
         // TODO: do the calculation to find if the comment needs to be hidden
-        if (sentiment < -0.2) {
+        if (sentiment < 0.03) {
             console.log("HIDE ==>O");
             return true;
             // Thus the message is negative and contains anger
