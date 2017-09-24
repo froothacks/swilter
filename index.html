@@ -38,6 +38,20 @@ function writeUserData(commentJSON) {
 		payload
 	);
 }
+
+function readAllData() {
+	var commentsArray = [];
+    database.ref().on("value", function(data) {
+		console.log(data);
+		data.forEach(function(childSnapshot) {
+	      console.log(childSnapshot.val());
+	      commentsArray.push(childSnapshot.val());
+	    });
+
+        console.log(commentsArray);
+        return commentsArray;
+	});
+}
 $('#comments-container').comments({
     profilePictureURL: 'https://app.viima.com/static/media/user_profiles/user-icon.png',
     postComment: function(commentJSON, success, error) {
