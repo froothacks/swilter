@@ -1,18 +1,28 @@
-(function () {
-  'use strict';
+"use strict";
+console.log("loaded app.js");
 
+let fetch = require("node-fetch");
+
+(function () {
   if (!window.addEventListener) return; // Check for IE9+
 
   let options = INSTALL_OPTIONS;
   let element;
 
   let controlsHTML = `
-    <label class="swilter-switch">
-      <input type="checkbox" checked>
-      <span class="swilter-switch-slider"></span>
-
-      Swilter
-    </label>
+    <swilter-main>
+      <swilter-h1>Swilter</swilter-h1>
+      <label class="swilter-switch">
+        <input id="swilter-filter-profanity" name="swilter-filter-profanity" type="checkbox" checked>
+        <span class="swilter-switch-slider"></span>
+      </label>
+      <label class="swilter-switch-label" for="swilter-filter-profanity">Filter Profanity</label>
+      <label class="swilter-switch">
+        <input id="swilter-filter-ad-hominem" name="swilter-filter-ad-hominem" type="checkbox" checked>
+        <span class="swilter-switch-slider"></span>
+      </label>
+      <label class="swilter-switch-label" for="swilter-filter-ad-hominem">Filter Ad Hominem</label>
+    </swilter-main>
   `;
 
   // updateElement runs every time the options are updated.
@@ -30,15 +40,14 @@
   window.INSTALL_SCOPE = {
     setOptions (nextOptions) {
       options = nextOptions;
-
       updateElement();
     }
   }
 
   // This code ensures that the app doesn't run before the page is loaded.
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', updateElement);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", updateElement);
   } else {
     updateElement();
   }
-}();)
+}());

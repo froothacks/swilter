@@ -15,18 +15,18 @@ var uglify = require('gulp-uglify-es').default;
 // config
 var paths = {
   src: {
-    pug: "src/**/*.pug",
-    babel: "src/**/*.js",
+    // pug: "src/**/*.pug",
+    // babel: "src/**/*.js",
     sass: "src/**/*.scss",
     static: "static/**/*",
-    browserify: "src/app.js"
+    script: "src/**/*.js"
   },
   dest: { 
-    html: "build",
-    js: "build",
+    // html: "build",
+    // js: "temp",
     css: "build",
     static: "build",
-    browserify: "build"
+    script: "build"
   }
 };
 var browsers = "> 1%, last 2 versions, IE >= 9, Firefox ESR"
@@ -97,14 +97,23 @@ gulp.task("static", function() {
     }));
 });
 
-gulp.task("browserify", function() {
-  return gulp.src(paths.src.browserify)
+gulp.task("script", function() {
+  return gulp.src(paths.src.script)
+    .pipe(babel({
+      presets: [
+        ["env", {"targets": {"browsers": browsers}}]
+      ]
+    }))
+    .on('error', notify.onError({
+      message: "Babel error: <%= error.message %>",
+      title: "Babel error"
+    }))
     .pipe(browserify({
       insertGlobals: true,
       debug: false
     }))
-    .pipe(uglify())
-    .pipe(gulp.dest(paths.dest.browserify))
+    // .pipe(uglify())
+    .pipe(gulp.dest(paths.dest.script))
     .pipe(notify({
       title: "Success",
       message: "Browserfied: <%= file.relative %>"
@@ -116,16 +125,16 @@ gulp.task("clean", function(done) {
 });
 
 gulp.task("watch", function() {  
-  gulp.watch(paths.src.pug, gulp.task("pug"));
-  gulp.watch(paths.src.babel, gulp.task("babel"));
+  // gulp.watch(paths.src.pug, gulp.task("pug"));
+  // gulp.watch(paths.src.babel, gulp.task("babel"));
   gulp.watch(paths.src.sass, gulp.task("sass"));
   gulp.watch(paths.src.static, gulp.task("static"));
-  gulp.watch(paths.src.browserify, gulp.task("browserify"));
+  gulp.watch(paths.src.script, gulp.task("script"));
 });
 
 gulp.task("build",
   gulp.series("clean",
-    gulp.parallel("pug", "babel", "sass", "static", "browserify")));
+    gulp.parallel("sass", "static", "script")));
 
 gulp.task("default", 
   gulp.series("build", "watch"));

@@ -1,10 +1,29 @@
+@import url('https://fonts.googleapis.com/css?family=Droid+Sans:400,700');
+
+$color-disabled: #d9534f;
+$color-enabled: #5cb85c;
+
 /* Set the app attribute to your app's dash-delimited alias. */
 cloudflare-app[app="swilter"] {
   display: block;
-  font-weight: bold;
-  margin: .5em .2em;
-  outline: 1px dotted;
-  padding: .5em;
+  font-family: "Droid Sans", sans-serif;
+  font-size: 1rem;
+  margin: 0.5rem 0.25rem;
+  border: 1px solid #cccccc;
+  padding: 0.5rem;
+
+  swilter-main {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-flow: flex-start;
+    align-items: center;
+  }
+
+  swilter-h1 {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+  }
 
   /* Use native elements when you'd like to inherit some styles from the page. */
   // p {
@@ -28,13 +47,14 @@ cloudflare-app[app="swilter"] {
   // }
 
   .swilter-switch {
+    margin-left: 1em;
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 34px;
+    width: 56px;
+    height: 32px;
 
     input {
-      display:none;
+      display: none;
     }
 
     .swilter-switch-slider {
@@ -44,34 +64,34 @@ cloudflare-app[app="swilter"] {
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: #ccc;
-      border-radius: 34px;
-      transition: .4s;
+      background-color: $color-disabled;
+      border-radius: 32px;
+      transition: 0.4s;
     }
 
     .swilter-switch-slider:before {
       position: absolute;
       content: "";
-      height: 26px;
-      width: 26px;
+      height: 24px;
+      width: 24px;
       left: 4px;
       bottom: 4px;
       background-color: white;
       border-radius: 50%;
-      transition: .4s;
+      transition: 0.4s;
     }
 
     input:checked + .swilter-switch-slider {
-      background-color: #2196F3;
-    }
-
-    input:focus + .swilter-switch-slider {
-      box-shadow: 0 0 1px #2196F3;
+      background-color: $color-enabled;
     }
 
     input:checked + .swilter-switch-slider:before {
-      transform: translateX(26px);
+      transform: translateX(24px);
     }
+  }
 
+  .swilter-switch-label {
+    padding-left: 0.5rem;
+    display: inline-block;
   }
 }

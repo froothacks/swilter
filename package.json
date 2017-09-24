@@ -2,8 +2,7 @@
   "name": "swilter",
   "version": "0.1.0",
   "description": "",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://ethguo@github.com/froothacks/swilter.git"
@@ -30,5 +29,6 @@
     "uglify-es": "^3.0.28"
   },
   "dependencies": {
+    "node-fetch": "^1.7.3"
   }
 }
