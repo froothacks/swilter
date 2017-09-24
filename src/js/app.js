@@ -1,76 +1,5 @@
 (function ($) {
   "use strict";
-  //let fetch = require("node-fetch");
-  //var $ = require('jQuery');
-  function isSwear(string) {
-      let badwordRegex = /(\b(ur mom|(yo)?u suck|8={3,}D|nigg[aeu][rh]?|ass|(ass ?|a|a-)hole|fag(got)?|daf[au][qk]|(brain|mother|mutha)?fuc?k+(a|ing?|e?(r|d)| off+| y(ou|e)(rself)?|u+|tard)?|shit?(t?er|s|head)?|you scum|dickhead|pedo|whore|cunt|cocksucker|ejaculated?|jerk off|cummies|butthurt|queef|(private|pussy) show|pussy|lesbo|bitche?s?|hoe|(eat|suck)\b.{0,20}\b dick|dee[sz]e? nut[sz])s?\b)/;
-      let re = new RegExp(badwordRegex);
-      return re.exec(string) !== null;
-  }
-  function isOffensive(text, funct, commentJSON) {
-
-      let resultingStuff;
-      let data = {
-          "documents": [
-              {
-                  "language": "en",
-                  "id": "string",
-                  "text": text
-              }
-          ]
-      };
-      console.log("HEREEE");
-      $.ajax({
-          url : "https://eastus2.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment",
-          type: "POST",
-          headers: {"Content-Type": "application/json", "Ocp-Apim-Subscription-Key": "b0df8262f41e49e98c4d043237ae5c65"},
-          data : JSON.stringify(data),
-          success: function(data, textStatus, jqXHR)
-          {
-              console.log("in");
-              console.log(data);
-              let sentiment = data["documents"][0]["score"];
-              console.log("Me"+sentiment);
-              resultingStuff = sentiment < 0.2;
-              commentJSON["isOffensive"] = resultingStuff;
-              writeUserData(commentJSON);
-              funct(commentJSON);
-              return resultingStuff;
-          },
-          error: function (jqXHR, textStatus, errorThrown)
-          {
-            console.log("bad stuff");
-            return "FAIL";
-          }
-      });
-       // return fetch("https://eastus2.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment", {
-       //        method: 'POST',
-       //        body: JSON.stringify(data),
-       //        headers: {"Content-Type": "application/json", "Ocp-Apim-Subscription-Key": "b0df8262f41e49e98c4d043237ae5c65"}})
-       //        .then(res => res.json())
-       //        .then(json => {
-       //            console.log(json);
-       //            let sentiment = json["documents"][0]["score"];
-       //            console.log("Me"+sentiment);
-       //            resultingStuff = sentiment < 0.03;
-       //            return resultingStuff;
-       //        });
-
-  }
-
-  function getGIPHY(keywords=["cats","dogs","bears","love"]) {
-    searchQ = keywords[Math.floor(Math.random() * keywords.length) - 1];
-    console.log(searchQ);
-    return fetch("https://api.giphy.com/v1/gifs/search?api_key=GBov9dSMPUy2DLg9DMO0miWJlBP3sEo4&q=" + searchQ + "&limit=1&offset=0&rating=G&lang=en")
-        .then(res => {
-            return res.json();
-        })
-        .then(json => {
-            return json["data"][0]["embed_url"];
-        });
-  }
-
-  console.log("loaded app.js");
 
   if (!window.addEventListener) return; // Check for IE9+
 
@@ -104,21 +33,89 @@
     </swilter>
   `;
 
+  function isSwear(string) {
+    let dontReadThisRegex = /(\b(ur mom|(yo)?u suck|8={3,}D|nigg[aeu][rh]?|ass|(ass ?|a|a-)hole|fag(got)?|daf[au][qk]|(brain|mother|mutha)?fuc?k+(a|ing?|e?(r|d)| off+| y(ou|e)(rself)?|u+|tard)?|shit?(t?er|s|head)?|you scum|dickhead|pedo|whore|cunt|cocksucker|ejaculated?|jerk off|cummies|butthurt|queef|(private|pussy) show|pussy|lesbo|bitche?s?|hoe|(eat|suck)\b.{0,20}\b dick|dee[sz]e? nut[sz])s?\b)/;
+    let re = new RegExp(dontReadThisRegex);
+    return re.exec(string) !== null;
+  }
+
+  function isOffensive(text, funct, commentJSON) {
+    let result;
+    let data = {
+      "documents": [{
+        "language": "en",
+        "id": "string",
+        "text": text
+      }]
+    };
+    $.ajax({
+      url : "https://eastus2.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment",
+      type: "POST",
+      headers: {"Content-Type": "application/json", "Ocp-Apim-Subscription-Key": "b0df8262f41e49e98c4d043237ae5c65"},
+      data : JSON.stringify(data),
+      success: function(data, textStatus, jqXHR) {
+        let sentiment = data["documents"][0]["score"];
+        result = sentiment < 0.2;
+        commentJSON.isOffensive = result;
+        writeUserData(commentJSON);
+        funct(commentJSON);
+        return result;
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        return "Error";
+      }
+    });
+  }
+
+  function getGiphy(array, data, ind) {
+    console.log(data);
+    if (ind >= data.length) {
+      return array
+    }
+    let searchQ = ["cats", "dogs", "cute"][Math.floor(Math.random() * 3) - 1];
+    let entry = data[ind];
+    console.log(entry);
+    let comment = entry.val();
+    if ( !(filters.profanity && comment.isSwear)
+      && !(filters.adHominem && comment.isOffensive)) {
+      array.push(comment);
+      getGiphy(array, data, ind+1);
+      console.log("clean:", comment.content);
+    }
+    else {
+      $.ajax({
+          url: "http://api.giphy.com/v1/gifs/search?api_key=GBov9dSMPUy2DLg9DMO0miWJlBP3sEo4&q=" + searchQ + "&limit=1&offset=0&rating=G&lang=en",
+          type: "GET",
+          success: function(data) {
+
+           comment.file_mime_type = "image/gif";
+             let url = data[0].url
+             url = "https://media0" + url.substring(14); 
+             comment.content = url;
+
+             console.log(url); // here is where I'm having an issue!
+             array.push(comment)
+             getGiphy(array, data, ind+1);
+          }
+      });
+    }
+  }
+
   function writeUserData(commentJSON) {
-    var n = 0;
+    let n = 0;
     database.ref().on("value", function(data) {
       n = data.numChildren();
     });
-    var payload = {};
+    let payload = {};
     payload[n] = commentJSON;
     firebase.database().ref().update(payload);
   }
 
   function readAllData() {
-    var commentsArray = [];
+    let commentsArray = [];
     database.ref().on("value", function(data) {
-      data.forEach(function(childSnapshot) {
-        commentsArray.push(childSnapshot.val());
+      data.forEach(function(entry) {
+        commentsArray.push(entry.val());
       });
       return commentsArray;
     });
@@ -143,62 +140,61 @@
   }
 
   function updateComments() {
-    if ($('#comments-container').hasClass("jquery-comments")) {
-      $('#comments-container').html("")
+    if ($("#comments-container").hasClass("jquery-comments")) {
+      $("#comments-container").html("");
     }
-    $('#comments-container').comments({
-      profilePictureURL: 'https://app.viima.com/static/media/user_profiles/user-icon.png',
+    $("#comments-container").comments({
+      enableAttachments: true,
+      profilePictureURL: "https://app.viima.com/static/media/user_profiles/user-icon.png",
       postComment: function(commentJSON, success, error) {
-        var nameInput = $("#swilter-name-input").val();
+        let nameInput = $("#swilter-name-input").val();
         if (nameInput === "") {
           alert("Please enter a valid name!");
           error();
           return;
         }
-        commentJSON["fullname"] = nameInput;
-
-        commentJSON["isSwear"] = isSwear(commentJSON["content"]);
-        console.log("NINEINIENEIE");
-        isOffensive(commentJSON["content"], success, commentJSON);
-        // $.when(isOffensive(commentJSON["content"])).done(function(value) {
-        //   commentJSON["isOffensive"] = value;
-        // });
-
-        // isOffensive(commentJSON["content"]).then((value) => {
-        //   commentJSON["isOffensive"] = value;          
-        //   writeUserData(commentJSON);
-        //   success(commentJSON);
-        // });
-
-        // writeUserData(commentJSON);
-        // success(commentJSON);
+        commentJSON.fullname = nameInput;
+        commentJSON.isSwear = isSwear(commentJSON.content);
+        isOffensive(commentJSON.content, success, commentJSON);
+        updateComments();
       },
       getComments: function(success, error) {
-        var commentsArray = [];
+        let commentsArray = [];
+        let comment;
         database.ref().on("value", function(data) {
-          data.forEach(function(childSnapshot) {
-            // console.log(childSnapshot.val());
-            if ( !(filters.profanity && childSnapshot.val().isSwear)
-              && !(filters.adHominem && childSnapshot.val().isOffensive)) {
-              commentsArray.push(childSnapshot.val());
-            }
-            else {
-              let cleanComment = childSnapshot.val();
-              cleanComment.content = "BLEEP";
-              commentsArray.push(cleanComment);
-            }
-          });
-          success(commentsArray);
+          console.log("DATAAA");
+          console.log(data);
+          success(getGiphy(commentsArray, data, 0));
+          // data.forEach(function(entry) {
+          //   if ( !(filters.profanity && entry.val().isSwear)
+          //     && !(filters.adHominem && entry.val().isOffensive)) {
+          //     commentsArray.push(entry.val());
+          //     console.log("clean:", entry.val().content);
+          //   }
+          //   else {
+          //     comment = entry.val();
+          //     comment.file_mime_type = "image/gif";
+          //     // comment.content = "";
+          //     // delete comment.content;
+          //     getGiphy(commentsArray, comment);
+          //   }
         });
+      },
+      refresh: function() {
+        $('.comment-wrapper a[href^="https://media0.giphy.com"').each(function() {
+          let url = $(this).prop("href");
+          $(this).replaceWith(`<img src="${url}">`);
+        });
+        console.log("in refresh");
       }
     });
 
-    $("#swilter-filter-profanity").change(function() {
+    $("#swilter-filter-profanity").off("change").change(function() {
       filters.profanity = this.checked;
       updateComments();
     });
 
-    $("#swilter-filter-ad-hominem").change(function() {
+    $("#swilter-filter-ad-hominem").off("change").change(function() {
       filters.adHominem = this.checked;
       updateComments();
     });
