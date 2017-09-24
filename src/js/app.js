@@ -160,6 +160,8 @@
         commentJSON["isSwear"] = isSwear(commentJSON["content"]);
         console.log("NINEINIENEIE");
         isOffensive(commentJSON["content"], success, commentJSON);
+
+        updateComments();
         // $.when(isOffensive(commentJSON["content"])).done(function(value) {
         //   commentJSON["isOffensive"] = value;
         // });
@@ -184,7 +186,7 @@
             }
             else {
               let cleanComment = childSnapshot.val();
-              cleanComment.content = "BLEEP";
+              cleanComment.content = "🔥🔥🔥";
               commentsArray.push(cleanComment);
             }
           });
@@ -193,12 +195,12 @@
       }
     });
 
-    $("#swilter-filter-profanity").change(function() {
+    $("#swilter-filter-profanity").off("change").change(function() {
       filters.profanity = this.checked;
       updateComments();
     });
 
-    $("#swilter-filter-ad-hominem").change(function() {
+    $("#swilter-filter-ad-hominem").off("change").change(function() {
       filters.adHominem = this.checked;
       updateComments();
     });
