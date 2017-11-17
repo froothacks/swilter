@@ -45,7 +45,16 @@
         "description": "Filter ad hominem by default?",
         "type": "boolean",
         "default": true
+      },
+      "censorBody": {
+        "order": 3,
+        "title": "Censor icon",
+        "description": "Censor Icon for bad words",
+        "type": "string",
+        "default": "This comment has been censored",
+        "placeholder": "Any thing will do"
       }
+
     }
   }
 }

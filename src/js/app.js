@@ -79,6 +79,7 @@
 
   let filters = {
     "profanity": options.filterProfanity,
+    "censorIcon": options.censorBody,
     "adHominem": options.filterAdHominem
   }
 
@@ -186,7 +187,7 @@
             }
             else {
               let cleanComment = childSnapshot.val();
-              cleanComment.content = "🔥🔥🔥";
+              cleanComment.content = filters.censorIcon;
               commentsArray.push(cleanComment);
             }
           });
